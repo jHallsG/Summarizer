@@ -13,7 +13,7 @@ Ollama is an open-sourced tool to simplify working with LLM's. We will use it to
 You can head on to [Ollama](https://ollama.com/search?c=embedding) to search for your desired embedding.
 Instructions to download an embedding model is also provided in the site.
 
-#application.properties file.
+# 🗒️ application.properties file.
 ```properties
 spring.ai.openai.api-key                            --> provide your own api key
 spring.ai.ollama.embedding.enabled                  --> used to enable/disable ollama's embedding models. set it to true
