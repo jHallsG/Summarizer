@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -41,18 +42,13 @@ public class DataLoader {
 		if (count == 0) {
 			logger.info("Uploading vector embeddings...");
 			
-			// configure pdf reader to read each page
-			PdfDocumentReaderConfig config = PdfDocumentReaderConfig.builder()
-					.withPagesPerDocument(1)
-					.build();
+			// initialize the document reader to read on the file
+			TikaDocumentReader reader = new TikaDocumentReader(pdfResource);
 			
-			// apply pdf reader to the document
-			PagePdfDocumentReader reader = new PagePdfDocumentReader(pdfResource);
-			
-			// initialize splitter. this will get the text
+			// initialize splitter. this will split the text to separate chunks
 			TextSplitter splitter = new TokenTextSplitter();
 
-			// convert the texts to chunks
+			// split the texts to chunks
 			var chunks = splitter.apply(reader.get());
 			
 			logger.info("Uploading chunks to Vector Database. Please wait...");
@@ -63,4 +59,16 @@ public class DataLoader {
 			logger.info("Vector embeddings successfully uploaded.");
 		}
 	}
+	
+	// this code instantiates the PDF Document reader
+	// this is no longer in use. just keeping the code for any future use.
+	/*
+	public PagePdfDocumentReader docReaderUsingPDFReader(Resource resource) {
+		// configure pdf reader to read each page
+		PdfDocumentReaderConfig config = PdfDocumentReaderConfig.builder()
+							.withPagesPerDocument(1)
+							.build();
+		
+		return new PagePdfDocumentReader(resource);
+	} */
 }
